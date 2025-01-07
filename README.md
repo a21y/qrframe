@@ -8,7 +8,10 @@ Blatantly inspired by [QRBTF](https://qrbtf.com) and [Anthony Fu's QR Toolkit](h
 
 ## Examples
 
-I'm working on more examples.
+> [!CAUTION]
+> These example QR codes may not be reliably scannable! Results may vary drastically based on device and scanner!
+
+This project is a tool to create designs! These are only examples!
 
 <table>
   <tbody>
@@ -102,6 +105,10 @@ I'm working on more examples.
   </tbody>
 </table>
 
+## Create/modify designs with code
+
+![code and parameter editor ui](./examples/ui2.png)
+
 ## Features
 
 - Customize data:
@@ -118,13 +125,6 @@ I'm working on more examples.
     - Generated SVGs are not sanitized. This is an impossible task and attempting it breaks perfectly fine SVGs, makes debugging harder, and adds latency to previewing changes.
     - These should be non-issues, but even if you copy-and-paste and run malware there's no secrets to leak.
 
-### Use existing presets
-
-![style select ui](./examples/ui1.png)
-
-### Customizable parameters defined in code
-
-![code and parameter editor ui](./examples/ui2.png)
 
 ## Creating a preset
 

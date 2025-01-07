@@ -3,25 +3,31 @@ import Trash2 from "lucide-solid/icons/trash-2";
 import { For, Show, batch, createSignal, onMount, type JSX } from "solid-js";
 import { createStore } from "solid-js/store";
 import {
-  defaultParams,
   deepEqualObj,
+  defaultParams,
   parseParamsSchema,
   type ParamsSchema,
 } from "~/lib/params";
 import { PRESET_CODE } from "~/lib/presets";
-import { useQrContext, type RenderType } from "~/lib/QrContext";
+import { useQrContext } from "~/lib/QrContext";
+import { useRenderContext, type RenderType } from "~/lib/RenderContext";
+import Tutorial from "../../../presets/Tutorial?raw";
 import { FillButton, FlatButton } from "../Button";
 import { Collapsible } from "../Collapsible";
-import { DialogButton, ControlledDialog } from "../Dialog";
+import { ContentMenuTrigger, ContextMenuProvider } from "../ContextMenu";
+import { ControlledDialog, DialogButton } from "../Dialog";
 import { TextInput, TextareaInput } from "../TextInput";
 import { CodeEditor } from "./CodeEditor";
-import { Settings } from "./Settings";
 import { ParamsEditor } from "./ParamsEditor";
-import { Tutorial } from "~/lib/presets/Tutorial";
-import { ContentMenuTrigger, ContextMenuProvider } from "../ContextMenu";
+import { Settings } from "./Settings";
+
+import "virtual:blob-rewriter";
 
 type Props = {
   class?: string;
+  onTextFocus: () => void;
+  onTextBlur: () => void;
+  textRef: (ref: HTMLTextAreaElement) => void;
 };
 
 const FUNC_KEYS = "funcKeys";
@@ -41,8 +47,8 @@ function isPreset(key: string): key is keyof typeof PRESET_CODE {
 }
 
 export function Editor(props: Props) {
+  const { setInputQr } = useQrContext();
   const {
-    setInputQr,
     paramsSchema,
     setParamsSchema,
     setParams,
@@ -50,7 +56,7 @@ export function Editor(props: Props) {
     setRenderKey,
     setRender,
     setError,
-  } = useQrContext();
+  } = useRenderContext();
 
   const [code, setCode] = createSignal(PRESET_CODE.Basic);
   const [funcKeys, _setFuncKeys] = createStore<string[]>([]);
@@ -285,6 +291,9 @@ export function Editor(props: Props) {
       <TextareaInput
         placeholder="https://qrframe.kylezhe.ng"
         setValue={(s) => setInputQr("text", s || "https://qrframe.kylezhe.ng")}
+        onFocus={props.onTextFocus}
+        onBlur={props.onTextBlur}
+        ref={props.textRef}
       />
       <Collapsible trigger="Data">
         <Settings />
@@ -489,7 +498,7 @@ function Preview(props: PreviewProps) {
     >
       <div
         classList={{
-          "h-24 w-24 rounded-sm checkboard": true,
+          "h-24 w-24 rounded-sm checkerboard": true,
           "ring-2 ring-fore-base ring-offset-4 ring-offset-back-base":
             props.active,
         }}
